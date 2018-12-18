@@ -1,5 +1,6 @@
 # 거래소 공지 크롤러
 
+* 개인용 코드로 다소 지저분하며 최적화는 되어 있지 않음.
 * 국내 거래소 몇곳의 공지를 `requests`와 `selenium`으로 크롤링 하여 텔레그램 채널에 보내기 위한 프로젝트
 * 크롤링 및 크롤러 트리거 둘다 `aws lambda`를 사용. 
 * s3에 공지 파일을 올려 간단하게 최신 혹은 수정된 공지를 확인후 텔레그램에 메세지 전송
@@ -14,9 +15,9 @@
 
 
 ## 내용
-* `python version` - 3.6.5, `(aws runtime-3.6)`
+* `python version` - 3.6.5, `(aws lambda runtime-3.6)`
 * 기본적으로 `aws`에 현재 `lambda` 프로젝트가 없는 것으로 가정
-* `aws credentials`은 로컬 컴퓨터의 `./aws/credential`의 개인 프로필로 사용함.
+* `aws credentials`은 로컬 컴퓨터의 `.~/aws/credential`의 개인 프로필로 사용함.
 * 프로젝트에 있는 `Docker`관련 파일은 `lambda`와 최대한 동일한 환경에서 로컬 빌드를 해보기 위한 장치
 * 폴더의 구조는 바꾸면 안된다. 다른 부분을 수정하지 않는 이상은.
  
