@@ -8,7 +8,7 @@ from src.utils import (
 
 def crawler_func(event, context):
     print(event)
-    site = event.get('site')
+    site = event.get('site', BITHUMB)
     crawler = None
     if site == BITHUMB:
         crawler = BithumbCrawler('https://cafe.bithumb.com/')

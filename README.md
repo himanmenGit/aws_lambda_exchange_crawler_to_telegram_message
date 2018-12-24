@@ -34,6 +34,23 @@
 * `build-crawler-package`는 프로젝트를 s3에 올리기 위해 `crawler.zip`으로 프로젝트를 압축함
 * `make-crawler-s3-upload`는 처음시작시 디렉터리구조와 종속파일을 받아 압축하여 s3에 업로드 함. `--profile` 설정 해야함.
 
+* `make docker-run`을 실행시 `aws credential`이 없기 때문에 도커로 테스트가 힘들다 
+* 이를 해결 하기 위해 `docker-compose.yml`에 `env_file` 속성을 사용하여 `aws credential`을 넣어 보자
+* 최상위 폴더에 `.aws.env` 을 만들고 자격증명 키를 넣는다
+ 
+# 중요!!!!!
+# 세번 읽으시오!
+## 여기서 중요한것 `.gitignore`에 해당 파일을 추가하여 깃에 올리지 말것!!!!!!!
+`.aws.env`를 ignore 시킨다. 해당 저장소는 설명을 위해 삽입 한것. 
+`.aws.env`파일을 보면
+```bash
+AWS_BUCKET_NAME=<AWS_BUCKET_NAME>
+AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
+AWS_SECRET_ACCESS_KEY=<AWSSECRET_ACCESS_KEY>
+```
+도커의 환경변수를 `env_file`로 파일을 읽어와 사용하게 한다.
+
+`AWS_BUCKET_NAME`의 경우 도커를 사용하지 않는 `lambda`에서는 `lambda`의 환경 변수를 사용하여 설정하게 함.
 
 ## create_lambda.sh
 * 람다 함수를 만들기 위한 자동화 파일.
@@ -51,7 +68,7 @@ HANDLER=<함수 핸들러 경로>(crawler.crawler_func)
 RUNTIME=python3.6
 TIMEOUT=60
 MEMORY_SIZE=512
-ENV="Variables={PATH=/var/task/bin, PYTHONPATH=/var/task/src:/var/task/lib}"
+ENV="Variables={AWS_BUCKET_NAME=<AWS_BUCKET_NAME>, PATH=/var/task/bin, PYTHONPATH=/var/task/src:/var/task/lib}"
 PROFILE=<프로필 명>
 
 
@@ -94,3 +111,9 @@ aws lambda update-function-code \
 --s3-key ${KEY} \
 
 ```
+
+## 알게 된 점.
+* `aws lambda`에서 다른 서비스(`lambda`, `s3`)를 호출 할때 `boto3`에 직접 `aws credential`을 넣어 주지 않아도
+해당 서비스의 `role`이 호출 할 서비스에 정책이 연결이 되어 있으면 바로 사용 할 수 있다.
+
+* `docker-compose`의 `env_file`을 이용하여 환경변수를 셋팅 할수 있다.
