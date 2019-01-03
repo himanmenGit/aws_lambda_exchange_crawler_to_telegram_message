@@ -1,15 +1,21 @@
 #!/bin/bash
 
-FUNCTION_NAME=<람다 함수 이름>
-ZIP_FILE=<람수 함수 패키지 파일>(fileb://crawler.zip)
-BUCKET=<패키지 파일이 올라갈 S3 버켓 네임>
-KEY=<버켓에 올라갈 파일 네임>
+while read LINE; do
+	eval $LINE
+done < .aws.env
 
+FUNCTION_NAME=${AWS_LAMBDA_FUNC_NAME}
+ZIP_FILE=fileb://crawler.zip
+BUCKET_NAME=${AWS_BUCKET_NAME}
+KEY=crawler.zip
+PROFILE=${AWS_PROFILE}
 
-make make-crawler-s3-upload
+# 파일을 패키징하여 s3에 업로드 후
+make make-crawler-s3-upload BUCKET_NAME=${BUCKET_NAME} PROFILE=${PROFILE}
 
 
 aws lambda update-function-code \
 --function-name ${FUNCTION_NAME} \
---s3-bucket ${BUCKET} \
+--s3-bucket ${BUCKET_NAME} \
 --s3-key ${KEY} \
+--profile ${PROFILE}
