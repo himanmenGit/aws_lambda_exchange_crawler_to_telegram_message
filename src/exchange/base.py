@@ -70,8 +70,9 @@ class ExchangeBaseCrawler:
         return False
 
     def send_tg(self):
-        token = '<텔레그램 봇 API 키>'
-        chat_id = '<텔레그램 채널 링크>'
+        import os
+        token = os.environ.get('TG_BOT_API_KEY')
+        chat_id = os.environ.get('TG_CHANNEL_LINK')
         for notice in self.new_notice_list:
             bot = telegram.Bot(token=token)
             chat_id = chat_id

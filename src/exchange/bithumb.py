@@ -22,8 +22,8 @@ class BithumbCrawler(ExchangeBaseCrawler):
     def parser_notice(self, html):
         soup = Bs4(html, 'html.parser')
         notices = soup.select(
-            '#content  > div:nth-of-type(2) > div:nth-of-type(1) > div > table > tbody > tr > td.board-title > span')
-        pks = soup.select('#content > div:nth-of-type(2) > div:nth-of-type(1) > div > table > tbody > tr')
+            '#content  > div:nth-of-type(1) > div:nth-of-type(1) > div > table > tbody > tr > td.board-title > span')
+        pks = soup.select('#content > div:nth-of-type(1) > div:nth-of-type(1) > div > table > tbody > tr')
 
         for index, pk in enumerate(pks):
             title = notices[index].text

@@ -4,8 +4,10 @@ services:
   lambda:
     build: .
     env_file:
+    # aws credentials를 docker에서 쓰기 위한 것
      - ./.aws.env
     environment:
+    # lambda에서 소스와 라이브러리를 찾기 위한 환경변수 설정
       - PYTHONPATH=/var/task/src:/var/task/lib
       - PATH=/var/task/bin
     volumes:
