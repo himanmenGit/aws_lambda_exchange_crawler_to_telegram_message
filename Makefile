@@ -44,9 +44,6 @@ build-crawler-package: clean fetch-dependencies
 	cp crawler/crawler.zip .
 	rm -rf crawler
 
-BUCKET_NAME=<버켓 네임>
-PROFILE=<프로필 네임>
-
 make-crawler-s3-upload: build-crawler-package
     # 패키징 파일 s3 업로드
     # crawler.zip을 만들고 바로 s3 업로드

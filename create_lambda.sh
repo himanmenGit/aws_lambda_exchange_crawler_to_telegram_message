@@ -1,22 +1,28 @@
 #!/bin/bash
 
-REGION=<리전>
-FUNCTION_NAME=<람다 함수 이름>
-BUCKET_NAME=<버켓 네임>
-S3Key=<버켓 파일 KEY>
+while read LINE; do
+	eval $LINE
+done < .aws.env
+
+REGION=${AWS_REGION}
+FUNCTION_NAME=${AWS_LAMBDA_FUNC_NAME}
+BUCKET_NAME=${AWS_BUCKET_NAME}
+S3Key=crawler.zip
 CODE=S3Bucket=${BUCKET_NAME},S3Key=${S3Key}
-ROLE=<롤>(arn:aws:iam::123455678:role/lambda-user>)
-HANDLER=<함수 핸들러 경로>(crawler.crawler_func)
+ROLE=${AWS_LAMBDA_ROLE}
+HANDLER=crawler.crawler_func
 RUNTIME=python3.6
 TIMEOUT=60
 MEMORY_SIZE=512
-ENV="Variables={PATH=/var/task/bin, PYTHONPATH=/var/task/src:/var/task/lib}"
-PROFILE=<프로필 명>
+ENV="Variables={PATH=/var/task/bin,PYTHONPATH=/var/task/src:/var/task/lib,AWS_BUCKET_NAME=${AWS_BUCKET_NAME},TG_BOT_API_KEY=${TG_BOT_API_KEY},TG_CHANNEL_LINK=${TG_CHANNEL_LINK}}"
+PROFILE=${AWS_PROFILE}
 
 
-make make-crawler-s3-upload
+# 파일을 패키징하여 s3에 업로드 후
+make make-crawler-s3-upload BUCKET_NAME=${BUCKET_NAME} PROFILE=${PROFILE}
 
 
+# 람다를 만든다!
 aws lambda create-function \
 --region ${REGION} \
 --function-name ${FUNCTION_NAME} \
