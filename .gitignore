@@ -1,6 +1,5 @@
 /bin
 /test
-*.txt
 *.zip
 
 ### Django Builder Apps ###
