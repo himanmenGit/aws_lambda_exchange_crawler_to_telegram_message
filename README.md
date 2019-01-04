@@ -136,3 +136,9 @@ aws lambda update-function-code \
 해당 서비스의 `role`이 호출 할 서비스에 정책이 연결이 되어 있으면 바로 사용 할 수 있다.
 
 * `docker-compose`의 `env_file`을 이용하여 환경변수를 셋팅 할수 있다.
+
+* `lambda`에서 `PYTHONPATH`를 환경변수에 등록하면 기본적으로 셋팅되어 있는 `LAMBDA_RUNTIME_DIR`을 덮어서 못 쓰게 된다.      
+그것은 `lambda`에서는 기본적으로 `boto3`를 사용할 수 있지만 `requirements`들을 설치 하고 해당 라이브러리들이 있는 폴더를 환경 변수로 잡아 주게 되면       
+기본으로 런타임 라이브러리인 `boto3`는 사용 할 수 없다는 것. 해결 방법은 두가지 이다.
+`PYTHONPATH`에 `/var/runtime`을 추가 하는것과 `boto3`를 직접 `requirements`에 추가하는 것이다.
+
